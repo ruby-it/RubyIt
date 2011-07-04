@@ -1,3 +1,9 @@
+GIT
+  remote: http://github.com/smartinez87/exception_notification
+  revision: 24feff32725d1dc4f7663ed896c175d2a295ff83
+  specs:
+    exception_notification (2.4.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -32,7 +38,6 @@ GEM
     builder (2.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
-    exception_notification_rails3 (1.2.0)
     i18n (0.5.0)
     mail (2.2.19)
       activesupport (>= 2.3.6)
@@ -72,6 +77,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  exception_notification_rails3
+  exception_notification!
   mysql2 (~> 0.2.10)
   rails (= 3.0.9)
