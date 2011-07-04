@@ -9,5 +9,6 @@ gem 'exception_notification', :git => 'http://github.com/smartinez87/exception_n
 # gem 'ruby-debug'
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
-# group :development, :test do
-# end
+group :development, :test do
+  gem 'factory_girl_rails'
+end
