@@ -1,8 +1,6 @@
 class RevisionsController < ApplicationController
   #cache_sweeper :page_sweeper, :only => [ :create ]
-
   before_filter :authorize, :only=>[:new,:create]
-
 
   def show
     @page = Page.find_by_title(params[:page_title])
