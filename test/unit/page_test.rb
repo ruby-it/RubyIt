@@ -29,7 +29,7 @@ class PageTest < Test::Unit::TestCase
     assert cats=pages(:pretty_cats)
     assert page=Page.new
     assert r=Revision.new(
-      :author=>Author.find_or_create('nome','ip'),
+      :author=>Author.find_or_create_by_name_and_ip('nome','ip'),
       :body => "[[Pretty cats]] goo bar baz")
     page.current_revision=r
     assert r.save
@@ -39,7 +39,7 @@ class PageTest < Test::Unit::TestCase
     assert cats=pages(:pretty_cats)
     assert home=pages(:home_page)
     assert r=Revision.new(
-        :author=>Author.find_or_create('nome','ip'),
+        :author=>Author.find_or_create_by_name_and_ip('nome','ip'),
         :body=>"no pretty cats")
     home.current_revision=r
     assert r.save

@@ -8,7 +8,7 @@ class RevisionTest < Test::Unit::TestCase
   
   def test_new
     assert r=Revision.new(
-        :author=>Author.find_or_create('nome','ip'),
+        :author=>Author.find_or_create_by_name_and_ip('nome','ip'),
         :body => "Lovely voices!"
     )
     assert_equal false, r.save
@@ -20,14 +20,14 @@ class RevisionTest < Test::Unit::TestCase
 
   def test_create
     assert r=Revision.create(
-        :author=>Author.find_or_create('nome','ip'),
+        :author=>Author.find_or_create_by_name_and_ip('nome','ip'),
         :body => "Lovely voices!"
     )
     assert_kind_of ActiveRecord::Errors, r.errors
     assert_equal "can't be blank", r.errors['page']
     p= Page.new :title=>PageName
     assert r=Revision.create(
-        :author=>Author.find_or_create('nome','ip'),
+        :author=>Author.find_or_create_by_name_and_ip('nome','ip'),
         :body => "Lovely voices!",
         :page => p
     )
@@ -37,7 +37,7 @@ class RevisionTest < Test::Unit::TestCase
   def test_updating_of_page
     updated_at_before = pages(:pretty_cats).updated_at
     revision=pages(:pretty_cats).revisions.create(
-        :author=>Author.find_or_create('nome','ip'),
+        :author=>Author.find_or_create_by_name_and_ip('nome','ip'),
         :body => "Lovely voices!"
     )
     #p "--",updated_at_before,updated_at_before,"--"
