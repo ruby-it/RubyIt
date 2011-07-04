@@ -38,5 +38,10 @@ module RubyIt
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+
+    config.middleware.use ExceptionNotifier,
+      :email_prefix => "[Exception] ",
+      :sender_address => %{"Exception Notifier" <support@example.com>},
+      :exception_recipients => %w{rff_rff@yahoo.it}
   end
 end
