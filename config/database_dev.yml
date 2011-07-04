@@ -1,0 +1,23 @@
+common_config: &common
+# <<: *common
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  pool: 5
+  username: user
+  password: secret
+  socket: /var/run/mysqld/mysqld.sock
+
+development:
+  <<: *common
+  database: rubyit_development
+
+test:
+  <<: *common
+  database: rubyit_test
+
+production:
+  <<: *common
+  database: qb_production
+  username: user
+  password: secret
