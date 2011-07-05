@@ -1,51 +1,57 @@
 require 'test_helper'
 
 class RevisionTest < Test::Unit::TestCase
-  PageName='qualche lungo titolo'
-  def test_page_links
-    assert_equal %w(Meow Kitty James), revisions(:pretty_cats_v1).page_links
-  end
-  
-  def test_new
-    assert r=Revision.new(
-        :author=>Author.find_or_create_by_name_and_ip('nome','ip'),
-        :body => "Lovely voices!"
-    )
-    assert_equal false, r.save
-    p= Page.new :title=>PageName
-    p.current_revision=r
-    assert p.save
-    assert_equal Page.find_by_title(PageName).current_revision, r
+
+  def setup
+    @page = Factory.create(:page)
+    @author = Factory.create(:author)
   end
 
-  def test_create
-    assert r=Revision.create(
-        :author=>Author.find_or_create_by_name_and_ip('nome','ip'),
-        :body => "Lovely voices!"
-    )
-    assert_kind_of ActiveRecord::Errors, r.errors
-    assert_equal "can't be blank", r.errors['page']
-    p= Page.new :title=>PageName
-    assert r=Revision.create(
-        :author=>Author.find_or_create_by_name_and_ip('nome','ip'),
-        :body => "Lovely voices!",
-        :page => p
-    )
-    assert_equal Page.find_by_title(PageName).current_revision, r
+  def test_validations
+    revision = Factory.build(:revision, :page => @page, :author => @author)
+
+    # page
+    revision.page = nil
+    assert !revision.valid?
+    assert revision.errors.has_key?(:page)
+    revision.page = @page
+    assert revision.valid?
+
+    # author
+    revision.author = nil
+    assert !revision.valid?
+    assert revision.errors.has_key?(:author)
+    revision.author = @author
+    assert revision.valid?
+
+    # body
+    body = revision.body
+    revision.body = nil
+    assert !revision.valid?
+    assert revision.errors.has_key?(:body)
+    revision.body = body
+    assert revision.valid?
+  end
+
+  def test_page_links
+    revision = Factory.create(:revision, :body => "My fine cats: [[Meow]], [[Kitty]], [[James]]")
+    assert_equal %w(Meow Kitty James), revision.page_links
   end
 
   def test_updating_of_page
-    updated_at_before = pages(:pretty_cats).updated_at
-    revision=pages(:pretty_cats).revisions.create(
-        :author=>Author.find_or_create_by_name_and_ip('nome','ip'),
-        :body => "Lovely voices!"
+    updated_at_before = @page.updated_at
+    sleep 0.1 # sleep enough to get different timestamp on updated_at
+    revision = @page.revisions.create(
+      :author => @author,
+      :body => 'this is a body'
     )
-    #p "--",updated_at_before,updated_at_before,"--"
-    assert updated_at_before < pages(:pretty_cats, :refresh).updated_at
+    @page.reload
+    assert (updated_at_before != @page.updated_at)
   end
+
   def test_updating_of_page_fail
-    updated_at_before = pages(:pretty_cats).updated_at
-    pages(:pretty_cats).revisions.create(:body => "Lovely voices!")
-    assert updated_at_before == pages(:pretty_cats, :refresh).updated_at
+    updated_at_before = @page.updated_at
+    @page.revisions.create(:body => "Lovely voices!")
+    assert updated_at_before == @page.updated_at
   end
 end

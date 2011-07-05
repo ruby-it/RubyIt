@@ -23,3 +23,9 @@ end
 Factory.define :page do |p|
   p.title { Factory.next :title }
 end
+
+Factory.define :revision do |r|
+  r.body { Factory.next :body }
+  r.association :page
+  r.association :author #, :factory => :author
+end
